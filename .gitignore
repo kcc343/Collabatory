@@ -1,0 +1,12 @@
+# Api key for
+api_key.R
+
+# DS_Store
+.DS_Store
+
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
