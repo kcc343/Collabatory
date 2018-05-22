@@ -23,37 +23,15 @@ genre_list <- fromJSON(body)
 
 # Get genre average budgets
 
-# all_movies <- list()
-# 
-# for (num in 1:length(genre_list$genres$name)) {
-#   resource <- "/discover/movie"
-#   uri_full <- paste0(base_uri, resource)
-#   query_params <- list(api_key = api_key, with_genres = genre_list$genres$id[num])
-#   
-#   response <- GET(uri_full, query = query_params)
-#   body <- content(response, "text")
-#   
-#   variable_string <- paste0(genre_list$genres$name[num], "_movies")
-#   variable_frame <- assign(variable_string, fromJSON(body))
-#   all_movies[[num]] <- variable_frame
-# }
-# 
-# action_movies <- list()
-# 
-# for (num in 1:length(all_movies[[1]]$results$id)) {
-#   resource <- paste0("/movie/", all_movies[[1]]$results$id[num])
-#   uri_full <- paste0(base_uri, resource)
-#   query_params <- list(api_key = api_key)
-#   
-#   response <- GET(uri_full, query = query_params)
-#   body <- content(response, "text")
-#   movie <- fromJSON(body)
-#   action_movies[[num]] <- movie
-# }
-
 resource <- "/discover/movie"
 uri_full <- paste0(base_uri, resource)
-query_params <- list(api_key = api_key, with_genres = genre_list$genres$id[1], primary_release_date.gte = as.character(Sys.Date() - 3650))
+query_params <- list(
+  api_key = api_key, 
+  sort_by = "release_date.desc", 
+  with_genres = genre_list$genres$id[1], 
+  primary_release_date.gte = as.character(Sys.Date() - 7300),
+  with_release_type = 1
+)
 
 response <- GET(uri_full, query = query_params)
 body <- content(response, "text")
@@ -62,16 +40,21 @@ body <- content(response, "text")
 # variable_frame <- assign(variable_string, fromJSON(body))
 action_movies <- fromJSON(body)
 all_action_movies <- action_movies$results
+count <- 0
 for (num in 2:action_movies$total_pages) {
-  query_params <- list(api_key = api_key, with_genres = genre_list$genres$id[1], page = num)
-  response <- GET(uri_full, query = query_params)
-  body <- content(response, "text")
-  one_page <- fromJSON(body)
-  all_action_movies <- rbind(all_action_movies, one_page$results)
+    response <- GET(uri_full, query = c(query_params, page = num))
+    body <- content(response, "text")
+    one_page <- fromJSON(body)
+    all_action_movies <- rbind(all_action_movies, one_page$results)
+    count <- count + 1
+    if (count == 24) {
+      Sys.sleep(10)
+      count <- 0
+    }
 }
 
 get_details <- list()
-
+count <- 0
 for (num in 1:nrow(all_action_movies)) {
     resource <- paste0("/movie/", all_action_movies$id[num])
     uri_full <- paste0(base_uri, resource)
@@ -81,13 +64,15 @@ for (num in 1:nrow(all_action_movies)) {
     body <- content(response, "text")
     one_page <- fromJSON(body)
     get_details[[num]] <- one_page
+    count <- count + 1
+    if (count == 35) {
+      Sys.sleep(10)
+      count <- 0
+    }
 }
 
 budget <- c()
-#genres <- list()
-#homepage <- c()
 status <- c()
-original_title <- c()
 overview <- c()
 popularity <- c()
 production_companies <- list()
@@ -99,13 +84,10 @@ title <- c()
 
 for (num in 1:length(get_details)) {
   budget <- c(budget, get_details[[num]]$budget)
-  #genres <- c(genres, get_details[[num]]$genres)
-  #homepage <- c(homepage, get_details[[num]]$homepage)
-  original_title <- c(original_title, get_details[[num]]$original_title)
   overview <- c(overview, get_details[[num]]$overview)
   popularity <- c(popularity, get_details[[num]]$popularity)
   production_companies <- c(production_companies, get_details[[num]]$production_companies)
-  # production_countries <- c(production_countries, get_details[[num]]$production_countries)
+  production_countries <- c(production_countries, get_details[[num]]$production_countries)
   status <- c(status, get_details[[num]]$status)
   release_date <- c(release_date, get_details[[num]]$release_date)
   revenue <- c(revenue, get_details[[num]]$revenue)
@@ -113,5 +95,6 @@ for (num in 1:length(get_details)) {
   title <- c(title, get_details[[num]]$title)
 }
 
-get_details_2 <- data.frame(budget, revenue, title, overview, popularity, release_date, status)
+action_df <- data.frame(budget, revenue, title, overview, popularity, release_date, status, stringsAsFactors = F)
 
+write.csv(action_df, file = paste0("../files/", genre_list$genres$name[1], "_df.csv"))
