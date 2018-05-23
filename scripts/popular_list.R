@@ -64,4 +64,4 @@ for (num in 1:length(popular_data)) {
   credits <- c(credits, popular_data[[num]]$credits[1])
 }
 
-get_details <- data.frame(budget, revenue, title, overview, popularity, release_date, status, b=I(credits))
+get_details <- data.frame(budget, revenue, title, overview, popularity, release_date, status)
