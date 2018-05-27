@@ -23,7 +23,7 @@ body <- content(response, "text")
 genre_list <- fromJSON(body)
 
 # Get genre budgets and revenue
-# 
+
 for (i in 1:length(genre_list$genres$id)) {
   resource <- "/discover/movie"
   uri_full <- paste0(base_uri, resource)
@@ -127,7 +127,8 @@ for (i in 1:length(genre_list$genres$id)) {
   # The runtime list does not get the last value if it has a null so I had to do:
   # runtime[length(get_details]) < - NA manually 
   # Also had to change the max of the for loop from 1:length(genre_list$genres$id) to 
-  # 8:length(genre_list$genres$id) after drama genre error.
+  # 8:length(genre_list$genres$id) after drama genre error. This was in order
+  # to get all of the data.
   
   df_string <- paste0(genre_list$genres$name[i], "_df")
   df <- assign(
