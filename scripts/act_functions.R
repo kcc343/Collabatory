@@ -49,5 +49,3 @@ act_analysis <- function(name, type) {
 
   ggplotly(p, tooltip = c("text"))
 }
-
-act_analysis("Matt Damon", "revenue")

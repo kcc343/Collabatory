@@ -50,6 +50,7 @@ genre_pop <- function(genre_name, type) {
   p
 }
 
+# takes in the genre name and b/r
 genre_runtime <- function(genre_name, type) {
   data <- read.csv(
     paste0("../files/", genre_name, "_df.csv"),
@@ -96,6 +97,7 @@ genre_runtime <- function(genre_name, type) {
   p
 }
 
+# takes in the genre name and b/r
 genre_vote <- function(genre_name, type) {
   data <- read.csv(
     paste0("../files/", genre_name, "_df.csv"),

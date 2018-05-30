@@ -72,6 +72,7 @@ com_mean <- function(type) {
     "20th Century Fox"
   )
   mean <- list()
+  # read in the data and do basic filtering
   for (i in 1:length(companies_list)) {
     data <- read.csv(
       paste0("../files/", companies_list[i], "_df.csv"),
