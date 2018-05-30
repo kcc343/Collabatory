@@ -32,7 +32,7 @@ com_trend <- function(name) {
     t = 100,
     pad = 4
   )
-  
+
   # make the line plot of trend
   p <- plot_ly(mean_yr,
     x = ~ release_year,
@@ -83,8 +83,8 @@ com_mean <- function(type) {
     # record the mean
     mean[i] <- mean(data[, type])
   }
-  
-  #custom the margin
+
+  # custom the margin
   m <- list(
     l = 90,
     r = 50,
@@ -92,7 +92,7 @@ com_mean <- function(type) {
     t = 100,
     pad = 4
   )
-  
+
   # plot the average graph
   p <- plot_ly(
     x = companies_list,
