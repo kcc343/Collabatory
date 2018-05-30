@@ -1,5 +1,5 @@
 com_list <- c(
-    "Walt Disney Animation Studios",
+  "Walt Disney Animation Studios",
     "Sony Pictures",
     "Universal Pictures",
     "Paramount",
