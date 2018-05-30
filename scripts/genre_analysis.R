@@ -4,7 +4,6 @@ library(dplyr)
 library(httr)
 library(jsonlite)
 
-
 # Source api key
 
 source("api_key.R")
@@ -16,34 +15,46 @@ resource <- "/genre/movie/list"
 uri_full <- paste0(base_uri, resource)
 query_params <- list(api_key = api_key)
 
-# Send HTTP Request
+# Send HTTP Request to get list of genres
 
 response <- GET(uri_full, query = query_params)
 body <- content(response, "text")
 genre_list <- fromJSON(body)
 
-# Get genre budgets and revenue
+# Get genre budgets, revenue, vote count, popularity, runtime, etc. data
 
 for (i in 1:length(genre_list$genres$id)) {
+
+  # Create HTTP request to get genre of movies
+
   resource <- "/discover/movie"
   uri_full <- paste0(base_uri, resource)
   query_params <- list(
-    api_key = api_key, 
-    sort_by = "release_date.desc", 
-    with_genres = genre_list$genres$id[i], 
+    api_key = api_key,
+    sort_by = "release_date.desc",
+    with_genres = genre_list$genres$id[i],
     primary_release_date.gte = as.character(Sys.Date() - 7300),
     with_release_type = 1
   )
-  
+
+  # Send HTTP request
+
   response <- GET(uri_full, query = query_params)
   body <- content(response, "text")
-  
+
+  # Assign results to a variable to save total pages data
+
   movie_string <- paste0(genre_list$genres$name[i], "_movies")
   movie_frame <- assign(movie_string, fromJSON(body))
-  
+
+  # Assign first page results to a data frame
+
   all_string <- paste0("all_", genre_list$genres$name[i], "_movies")
   all_movie_frame <- assign(all_string, movie_frame$results)
-  
+
+  # Get movie data ids from each page and let code wait for 10 seconds to reset
+  # API request to 40
+
   count <- 0
   for (num in 2:movie_frame$total_pages) {
     response <- GET(uri_full, query = c(query_params, page = num))
@@ -56,14 +67,17 @@ for (i in 1:length(genre_list$genres$id)) {
       count <- 0
     }
   }
-  
+
+  # Get movie data from ids and let code wait for 10 seconds to reset API
+  # request to 40
+
   get_details <- list()
   count <- 0
   for (num in 1:nrow(all_movie_frame)) {
     resource <- paste0("/movie/", all_movie_frame$id[num])
     uri_full <- paste0(base_uri, resource)
     query_params <- list(api_key = api_key)
-    
+
     response <- GET(uri_full, query = query_params)
     body <- content(response, "text")
     one_page <- fromJSON(body)
@@ -74,7 +88,9 @@ for (i in 1:length(genre_list$genres$id)) {
       count <- 0
     }
   }
-  
+
+  # Build lists for each data type
+
   budget <- list()
   status <- list()
   overview <- list()
@@ -86,7 +102,7 @@ for (i in 1:length(genre_list$genres$id)) {
   revenue <- list()
   runtime <- list()
   title <- list()
-  
+
   for (num in 1:length(get_details)) {
     budget[num] <- get_details[[num]]$budget
     overview[num] <- get_details[[num]]$overview
@@ -94,12 +110,18 @@ for (i in 1:length(genre_list$genres$id)) {
     vote_count[num] <- get_details[[num]]$vote_count
     string <- ""
     for (company in 1:length(get_details[[num]]$production_companies$name)) {
-       string <- paste0(string, get_details[[num]]$production_companies$name[company], ", ")
+      string <- paste0(
+        string,
+        get_details[[num]]$production_companies$name[company], ", "
+      )
     }
     production_companies[num] <- string
     string <- ""
     for (country in 1:length(get_details[[num]]$production_countries$name)) {
-      string <- paste0(string, get_details[[num]]$production_countries$name[country], ", ")
+      string <- paste0(
+        string,
+        get_details[[num]]$production_countries$name[country], ", "
+      )
     }
     production_countries[num] <- string
     status[num] <- get_details[[num]]$status
@@ -108,8 +130,9 @@ for (i in 1:length(genre_list$genres$id)) {
     runtime[num] <- get_details[[num]]$runtime
     title[num] <- get_details[[num]]$title
   }
-  
+
   # Convert empty values into NA
+
   budget[sapply(budget, is.null)] <- NA
   overview[sapply(overview, is.null)] <- NA
   popularity[sapply(popularity, is.null)] <- NA
@@ -121,24 +144,27 @@ for (i in 1:length(genre_list$genres$id)) {
   revenue[sapply(revenue, is.null)] <- NA
   runtime[sapply(runtime, is.null)] <- NA
   title[sapply(title, is.null)] <- NA
-  
+
   # For some reason runtime list has rows off by one compared to the other lists
   # in Drama and Western genres.
-  # The runtime list does not get the last value if it has a null so I had to do:
-  # runtime[length(get_details]) < - NA manually 
-  # Also had to change the max of the for loop from 1:length(genre_list$genres$id) to 
-  # 8:length(genre_list$genres$id) after drama genre error. This was in order
-  # to get all of the data.
-  
+  # The runtime list does not get the last value if it has a null so I had to
+  # do:
+  # runtime[length(get_details]) < - NA manually
+  # Also had to change the max of the for loop from
+  # 1:length(genre_list$genres$id) to 8:length(genre_list$genres$id) after
+  # drama genre error. This was in order to get all of the data.
+
+  # Put all lists into a data frame
+
   df_string <- paste0(genre_list$genres$name[i], "_df")
   df <- assign(
-    df_string, 
+    df_string,
     data.frame(
-      budget = unlist(budget), 
+      budget = unlist(budget),
       revenue = unlist(revenue),
-      title = unlist(title), 
-      overview = unlist(overview), 
-      popularity = unlist(popularity), 
+      title = unlist(title),
+      overview = unlist(overview),
+      popularity = unlist(popularity),
       vote_count = unlist(vote_count),
       release_date = unlist(release_date),
       status = unlist(status),
@@ -148,8 +174,12 @@ for (i in 1:length(genre_list$genres$id)) {
       stringsAsFactors = F
     )
   )
-  
-  write.csv(df, file = paste0("../files/", genre_list$genres$name[i], "_df.csv"))
+
+  # Create csv file for data frame and let API requests reset to 40
+
+  write.csv(
+    df,
+    file = paste0("../files/", genre_list$genres$name[i], "_df.csv")
+  )
   Sys.sleep(10)
 }
-
