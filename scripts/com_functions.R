@@ -23,7 +23,7 @@ com_trend <- function(name) {
       mean_budget = mean(budget),
       mean_revenue = mean(revenue)
     )
-  
+
   # set the customed margin
   m <- list(
     l = 90,
@@ -39,14 +39,14 @@ com_trend <- function(name) {
     type = "scatter",
     mode = "lines",
     name = "revenue"
-  ) %>% 
-    add_trace(
-    x = ~ release_year,
-    y = ~ mean_budget,
-    type = "scatter",
-    mode = "lines",
-    name = "budget"
   ) %>%
+    add_trace(
+      x = ~ release_year,
+      y = ~ mean_budget,
+      type = "scatter",
+      mode = "lines",
+      name = "budget"
+    ) %>%
     layout(
       autosize = F, width = 500, height = 500, margin = m,
       title = paste0(name, "\'s movie B/R trend"),
@@ -82,7 +82,7 @@ com_mean <- function(type) {
     # record the mean
     mean[i] <- mean(data[, type])
   }
-  
+
   m <- list(
     l = 90,
     r = 50,
@@ -90,7 +90,7 @@ com_mean <- function(type) {
     t = 100,
     pad = 4
   )
-  
+
   p <- plot_ly(
     x = companies_list,
     y = mean,
