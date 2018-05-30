@@ -6,7 +6,7 @@ library(plotly)
 # takes in genre name and type of budget or reveneu
 genre_pop <- function(genre_name, type) {
   data <- read.csv(
-    paste0("./files/", genre_name, "_df.csv"),
+    paste0("../files/", genre_name, "_df.csv"),
     stringsAsFactors = FALSE
   )
   # do some basic filtering
@@ -52,7 +52,7 @@ genre_pop <- function(genre_name, type) {
 
 genre_runtime <- function(genre_name, type) {
   data <- read.csv(
-    paste0("./files/", genre_name, "_df.csv"),
+    paste0("../files/", genre_name, "_df.csv"),
     stringsAsFactors = FALSE
   )
   # do some basic filtering
@@ -98,7 +98,7 @@ genre_runtime <- function(genre_name, type) {
 
 genre_vote <- function(genre_name, type) {
   data <- read.csv(
-    paste0("./files/", genre_name, "_df.csv"),
+    paste0("../files/", genre_name, "_df.csv"),
     stringsAsFactors = FALSE
   )
   # do some basic filtering
@@ -145,14 +145,18 @@ genre_vote <- function(genre_name, type) {
 # takes in type of budget or reveneu
 genre_mean <- function(type) {
   mean <- c()
+  
+  # list selected genres
   genre <- c(
     "Action", "Adventure", "Animation", "Comedy", "Crime", "Drama",
     "Family", "Fantasy", "Horror", "Mystery", "Romance",
     "Science Fiction", "Thriller"
   )
+  
+  # read in the file and basic filtering
   for (i in 1:length(genre)) {
     data <- read.csv(
-      paste0("./files/", genre[i], "_df.csv"),
+      paste0("../files/", genre[i], "_df.csv"),
       stringsAsFactors = FALSE
     )
     data <- data %>%
@@ -160,7 +164,11 @@ genre_mean <- function(type) {
       filter(popularity >= 10)
     mean[i] <- mean(data[, type])
   }
+  
+  # make a data frame of mean info
   mean_df <- data.frame(genre, mean)
+  
+  # plot the mean barplot
   p <- plot_ly(mean_df,
     x = ~ genre,
     y = ~ mean,

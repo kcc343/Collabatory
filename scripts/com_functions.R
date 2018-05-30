@@ -7,7 +7,7 @@ library(plotly)
 com_trend <- function(name) {
   # read in the company's data
   data <- read.csv(
-    paste0("./files/", name, "_df.csv"),
+    paste0("../files/", name, "_df.csv"),
     stringsAsFactors = FALSE
   )
   # basic filtering
@@ -32,7 +32,8 @@ com_trend <- function(name) {
     t = 100,
     pad = 4
   )
-
+  
+  # make the line plot of trend
   p <- plot_ly(mean_yr,
     x = ~ release_year,
     y = ~ mean_revenue,
@@ -73,7 +74,7 @@ com_mean <- function(type) {
   mean <- list()
   for (i in 1:length(companies_list)) {
     data <- read.csv(
-      paste0("./files/", companies_list[i], "_df.csv"),
+      paste0("../files/", companies_list[i], "_df.csv"),
       stringsAsFactors = FALSE
     )
     # filtering the data
@@ -82,7 +83,8 @@ com_mean <- function(type) {
     # record the mean
     mean[i] <- mean(data[, type])
   }
-
+  
+  #custom the margin
   m <- list(
     l = 90,
     r = 50,
@@ -90,7 +92,8 @@ com_mean <- function(type) {
     t = 100,
     pad = 4
   )
-
+  
+  # plot the average graph
   p <- plot_ly(
     x = companies_list,
     y = mean,
