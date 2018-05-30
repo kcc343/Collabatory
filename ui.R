@@ -12,52 +12,57 @@ source("scripts/com_list.R")
 
 # Create ui
 
-ui <- fluidPage(
-    #includeCSS("style.css"),
-    navbarPage("Catagories", id = "tabbar",
+ui <- fluidPage(theme = 'bootstrap.css', id = 'bg-primary',
+    navbarPage("Hollywood B&R", id = 'navbar',
     # First Tab
     navbarMenu("Home",
-      tabPanel(id = 'tab',
+      tabPanel(
         title = "About Us",
         titlePanel("About Us"),
         mainPanel(
-          textOutput("about_us")
+          imageOutput("kelly_image"),
+          textOutput("about_us_kelly"),
+          imageOutput("anna_image"),
+          textOutput("about_us_anna"),
+          imageOutput("emily_image"),
+          textOutput("about_us_emily")
         )
       ),
-      tabPanel(id = 'tab',
+      tabPanel(id = 'navbar',
         title = "Our Mission",
         titlePanel("Our Mission"),
-        mainPanel(
+        mainPanel(id = 'main',
           textOutput("our_mission")
         )),
-      tabPanel(id = 'tab',
+      tabPanel(id = 'navbar',
         title = "Goals",
         titlePanel("Our Goals"),
-        mainPanel(
+        mainPanel(id = 'main',
           textOutput("goals")
         ))
     ),
     # Second Tab
-    tabPanel(id = 'tab',
+    tabPanel(id = 'navbar',
       title = "Genres",
       titlePanel("Filter By Movie Generes"),
       sidebarLayout(
-        sidebarPanel(
+        sidebarPanel(id = 'card-body',
           selectInput(
             "genre",
             label = "Select Genre",
             choices = genre_list
           ),
+          helpText("Note: This selection does not apply to 'Mean'."),
           radioButtons(
             "type1",
-            label = h3("Type"),
+            label = "Type",
             choices = list(
               "Budget" = "budget",
               "Revenue" = "revenue"), 
             selected = "budget")
         ),
-        mainPanel(
-          tabsetPanel(
+        mainPanel(id = 'main',
+          tabsetPanel(id = 'nav-tab',
             tabPanel("Popularity", plotlyOutput("pop")), 
             tabPanel("Runtime", plotlyOutput("runtime")), 
             tabPanel("Vote", plotlyOutput("vote")),
@@ -67,11 +72,11 @@ ui <- fluidPage(
       )
     ),
     # Third Tab
-    tabPanel(id = 'tab',
+    tabPanel(id = 'navbar',
       title = "Actors/Actresses",
       titlePanel("Filter by Actors/Actresses Names"),
       sidebarLayout(
-        sidebarPanel(
+        sidebarPanel(id = 'card-body',
           selectInput(
             "actors",
             label = "Actors/Actresses",
@@ -79,43 +84,42 @@ ui <- fluidPage(
           ),
           radioButtons(
             "type2",
-            label = h4("Type"),
+            label = "Type",
             choices = list(
               "Budget" = "budget",
               "Revenue" = "revenue"), 
               selected = "budget")
         ),
-        mainPanel(
+        mainPanel(id = 'main',
           plotlyOutput("act")
         )
       )
     ),
     # Fourth Tab
-    tabPanel(id = 'tab',
+    tabPanel(id = 'navbar',
       title = "Companies",
       titlePanel("Filter By Company Names"),
       sidebarLayout(
-        sidebarPanel(
+        sidebarPanel(id = 'card-body',
           selectInput(
             "com",
             label = "Companies",
             choices = com_list
           ),
+          helpText("Note: This selection is not applicable to 'Mean'."),
           radioButtons(
             "type3",
-            label = h4("Type"),
+            label = "Type",
             choices = list(
               "Budget" = "budget",
-              "Revenue" = "revenue"), 
+              "Revenue" = "revenue"),
             selected = "budget")
         ),
-        mainPanel(
-          mainPanel(
+        mainPanel(id = 'main',
             tabsetPanel(
-              tabPanel("Trend", plotlyOutput("trend")),
+              tabPanel("Trend", plotlyOutput("com_trend")),
               tabPanel("Mean", plotlyOutput("com_mean"))
             )
-          )
         )
       )
     )

@@ -58,7 +58,6 @@ com_trend <- function(name) {
         title = "average"
       )
     )
-  p
 }
 
 # takes in the option of revenue/budget

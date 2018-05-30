@@ -15,14 +15,38 @@ source("scripts/com_functions.R")
 
 server <- function(input, output) {
   # Home Page Text Output
-  output$about_us <- renderText({
+  output$emily_image <- renderImage({
+    filename <- normalizePath(file.path('./images',paste('emily.jpg')))
+    list(src = filename,
+         alt = paste("Image number", input$n)
+         )
+  }, deleteFile = FALSE)
+  output$kelly_image <- renderImage({
+    filename <- normalizePath(file.path('./images',paste('kelly.jpg')))
+    list(src = filename,
+         alt = paste("Image number", input$n)
+    )
+  }, deleteFile = FALSE)
+  output$anna_image <- renderImage({
+    filename <- normalizePath(file.path('./images',paste('anna.jpg')))
+    list(src = filename,
+         alt = paste("Image number", input$n)
+    )
+  }, deleteFile = FALSE)
+  output$about_us_kelly <- renderText({
     paste(home_page[1])
   })
-  output$our_mission <- renderText({
+  output$about_us_anna <- renderText({
     paste(home_page[2])
   })
-  output$goals <- renderText({
+  output$about_us_emily <- renderText({
     paste(home_page[3])
+  })
+  output$our_mission <- renderText({
+    paste(home_page[4])
+  })
+  output$goals <- renderText({
+    paste(home_page[5])
   })
   
   
