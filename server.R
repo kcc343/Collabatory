@@ -47,7 +47,7 @@ server <- function(input, output) {
  
  #Third Tab - Companies Output Plot
  output$trend <- renderPlotly({
-   return(com_trend(input$com, input$type3))
+   return(com_trend(input$com))
  })
  output$com_mean <- renderPlotly({
    return(com_mean(input$type3))

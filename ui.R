@@ -112,7 +112,7 @@ ui <- fluidPage(
         mainPanel(
           mainPanel(
             tabsetPanel(
-              tabPanel("Trend", plotlyOutput("trend")),
+              tabPanel("Trend", plotlyOutput("com_trend")),
               tabPanel("Mean", plotlyOutput("com_mean"))
             )
           )
