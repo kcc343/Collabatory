@@ -117,7 +117,7 @@ ui <- fluidPage(theme = 'bootstrap.css', id = 'bg-primary',
         ),
         mainPanel(id = 'main',
             tabsetPanel(
-              tabPanel("Trend", plotlyOutput("com_trend")),
+              tabPanel("Trend", plotlyOutput("trend")),
               tabPanel("Mean", plotlyOutput("com_mean"))
             )
         )

@@ -21,10 +21,10 @@ about_us_emily <- paste("This is Emily Zhang, I am currently a Classics major
                         with me, I am always down for it :)", sep = "</br>")
 
 our_mission <- paste("The dataset we will be working with is one about all the 
-                     movies contained in?? The Movie DB. The data was collected by
+                     movies contained in? The Movie DB. The data was collected by
 users that started in 2008 and is still being contributed now. We can access the
 dataset via its homepage (The Movie Database (TMDb)). All of these data are 
-collected upon every movie???s release and it is for the users to correct and 
+collected upon every movies release and it is for the users to correct and 
 adjust the information in the dataset to the most accurate possible.")
 goals <- paste("We want our audience to learn:
         \t How do actresses/actors affect the revenue and budget for movies?
