@@ -6,7 +6,7 @@ library(plotly)
 # takes in genre name and type of budget or reveneu
 genre_pop <- function(genre_name, type) {
   data <- read.csv(
-    paste0("../files/", genre_name, "_df.csv"),
+    paste0("./files/", genre_name, "_df.csv"),
     stringsAsFactors = FALSE
   )
   # do some basic filtering
@@ -53,7 +53,7 @@ genre_pop <- function(genre_name, type) {
 # takes in the genre name and b/r
 genre_runtime <- function(genre_name, type) {
   data <- read.csv(
-    paste0("../files/", genre_name, "_df.csv"),
+    paste0("./files/", genre_name, "_df.csv"),
     stringsAsFactors = FALSE
   )
   # do some basic filtering
@@ -100,7 +100,7 @@ genre_runtime <- function(genre_name, type) {
 # takes in the genre name and b/r
 genre_vote <- function(genre_name, type) {
   data <- read.csv(
-    paste0("../files/", genre_name, "_df.csv"),
+    paste0("./files/", genre_name, "_df.csv"),
     stringsAsFactors = FALSE
   )
   # do some basic filtering
@@ -158,7 +158,7 @@ genre_mean <- function(type) {
   # read in the file and basic filtering
   for (i in 1:length(genre)) {
     data <- read.csv(
-      paste0("../files/", genre[i], "_df.csv"),
+      paste0("./files/", genre[i], "_df.csv"),
       stringsAsFactors = FALSE
     )
     data <- data %>%
