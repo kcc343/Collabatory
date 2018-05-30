@@ -2,6 +2,7 @@ library(tools)
 library(dplyr)
 library(plotly)
 library(ggplot2)
+library(scales)
 
 act_analysis <- function(name, type) {
   data <- read.csv(
@@ -9,34 +10,23 @@ act_analysis <- function(name, type) {
     stringsAsFactors = FALSE
   )
 
-  data <- data %>%
-    filter(budget != 0 & revenue != 0)
-
-  p <- ggplot(data, aes(x = factor(1), y = data[, type], text = paste0(type , ": ", data[, type]))) +
+  p <- ggplot(data, 
+              aes(x = factor(1),
+                  y = data[, type], 
+                  text = paste0(toTitleCase(type) , ": ", dollar_format()(data[, type]))
+                  )
+              ) +
     geom_boxplot() + 
     geom_jitter(size = 2, position = position_jitter(0.2)) +
-    ggtitle(paste0(toTitleCase(name), "'s movie ", type, " boxplot")) +
+    ggtitle(paste0(toTitleCase(name), "'s Movie ", toTitleCase(type), " Boxplot")) +
+    scale_y_continuous(name = toTitleCase(type), labels = dollar) +
     theme(
-      axis.text.x = element_blank()
+      axis.text.x = element_blank(),
+      axis.title.x = element_blank(),
+      axis.text.y = element_text(angle = 35)
     )
   
   ggplotly(p, tooltip = c("text"))
-  
-  # p <- plot_ly(data,
-  #   y = data[, type],
-  #   name = toTitleCase(name),
-  #   type = "box",
-  #   boxpoints = "all",
-  #   hoverinfo = "text",
-  #   text = paste0(
-  #      "title: ", data[, "title"], "<br />",
-  #      type, ": ", data[, type]
-  #   )
-  # ) %>%
-  #   layout(
-  #     title = paste0(toTitleCase(name), "'s movie ", type, " boxplot")
-  #   )
-  # p
 }
 
 act_analysis("Matt Damon", "revenue")
