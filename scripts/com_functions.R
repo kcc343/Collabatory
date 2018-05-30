@@ -4,7 +4,7 @@ library(dplyr)
 library(plotly)
 
 # takes in the name of company and revenue/budget to explore
-com_trend <- function(name, type) {
+com_trend <- function(name) {
   # read in the company's data
   data <- read.csv(
     paste0("../files/", name, "_df.csv"),
@@ -23,20 +23,38 @@ com_trend <- function(name, type) {
       mean_budget = mean(budget),
       mean_revenue = mean(revenue)
     )
+  
+  # set the customed margin
+  m <- list(
+    l = 90,
+    r = 50,
+    b = 100,
+    t = 100,
+    pad = 4
+  )
 
   p <- plot_ly(mean_yr,
     x = ~ release_year,
     y = ~ mean_revenue,
     type = "scatter",
-    mode = "lines"
+    mode = "lines",
+    name = "revenue"
+  ) %>% 
+    add_trace(
+    x = ~ release_year,
+    y = ~ mean_budget,
+    type = "scatter",
+    mode = "lines",
+    name = "budget"
   ) %>%
     layout(
-      title = paste0(name, "\'s movie ", type, " trend"),
+      autosize = F, width = 500, height = 500, margin = m,
+      title = paste0(name, "\'s movie B/R trend"),
       xaxis = list(
         title = "year released"
       ),
       yaxis = list(
-        title = paste("mean", type)
+        title = "average"
       )
     )
   p
@@ -64,12 +82,22 @@ com_mean <- function(type) {
     # record the mean
     mean[i] <- mean(data[, type])
   }
+  
+  m <- list(
+    l = 90,
+    r = 50,
+    b = 100,
+    t = 100,
+    pad = 4
+  )
+  
   p <- plot_ly(
     x = companies_list,
     y = mean,
     type = "bar"
   ) %>%
     layout(
+      autosize = F, width = 500, height = 500, margin = m,
       title = paste("6 companies' overall average", type)
     )
   p
