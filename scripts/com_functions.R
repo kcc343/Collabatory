@@ -49,7 +49,7 @@ com_trend <- function(name) {
       name = "budget"
     ) %>%
     layout(
-      autosize = F, width = 500, height = 500, margin = m,
+      margin = m,
       title = paste0(name, "\'s movie B/R trend"),
       xaxis = list(
         title = "year released"
@@ -101,7 +101,7 @@ com_mean <- function(type) {
     type = "bar"
   ) %>%
     layout(
-      autosize = F, width = 500, height = 500, margin = m,
+      margin = m,
       title = paste("6 companies' overall average", type)
     )
   p
