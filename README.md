@@ -1,5 +1,6 @@
 # INFO 201 BC Project Proposal
 Group Members: Emily Zhang, Kelly Chhor, Luoan Tang
+#Link to the app: [Link](https://aemelialialia.shinyapps.io/Info-Collabatory/)
 ## Project Description
 - The dataset we will be working with is one about all the movies contained in **The Movie DB**. The data was collected by users that started in 2008 and is still being contributed now. We can access the dataset via its homepage ([The Movie Database (TMDb)](https://www.themoviedb.org/)). All of these data are collected upon every movie’s release and it is for the users to correct and adjust the information in the dataset to the most accurate possible.
 
