@@ -7,7 +7,7 @@ library(plotly)
 com_trend <- function(name, type) {
   # read in the company's data
   data <- read.csv(
-    paste0("../files/", name, "_df.csv"),
+    paste0("./files/", name, "_df.csv"),
     stringsAsFactors = FALSE
   )
   # basic filtering
@@ -55,7 +55,7 @@ com_mean <- function(type) {
   mean <- list()
   for (i in 1:length(companies_list)) {
     data <- read.csv(
-      paste0("../files/", companies_list[i], "_df.csv"),
+      paste0("./files/", companies_list[i], "_df.csv"),
       stringsAsFactors = FALSE
     )
     # filtering the data
